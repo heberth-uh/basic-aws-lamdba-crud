@@ -1,0 +1,51 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: heberth
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: aws-lambda-crud-node
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  # Uncomment to easily set up a custom domain. Read the docs for more details:
+  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
+  # domain: api.example.com
+  region: us-east-2
+  # Define la variable de entorno para tus funciones
+  environment:
+    TASK_TABLE: ${self:service}-${sls:stage}-TaskTable
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+      Resource:
+        # Usa la variable de entorno para el ARN
+        - arn:aws:dynamodb:us-east-2:245013469473:table/${self:provider.environment.TASK_TABLE}
+
+functions:
+  hello:
+    handler: src/hello.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  createTask:
+    handler: src/addTask.addTask
+    events:
+      - httpApi:
+          path: /tasks
+          method: post
+
+resources:
+  Resources:
+    TaskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        # Construye el nombre de la tabla dinámicamente
+        TableName: ${self:service}-${sls:stage}-TaskTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
