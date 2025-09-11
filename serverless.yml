@@ -14,9 +14,13 @@ provider:
   environment:
     TASK_TABLE: ${self:service}-${sls:stage}-TaskTable
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - dynamodb:*
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
       Resource:
         # Usa la variable de entorno para el ARN
         - arn:aws:dynamodb:us-east-2:245013469473:table/${self:provider.environment.TASK_TABLE}
@@ -34,6 +38,12 @@ functions:
       - httpApi:
           path: /tasks
           method: post
+  getTasks:
+    handler: src/getTasks.getTasks
+    events:
+     - httpApi:
+        path: /tasks
+        method: get
 
 resources:
   Resources:
