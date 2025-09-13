@@ -35,7 +35,3 @@ This API exposes basic REST endpoints:
 ## Notes 📝
 
 This is not a production-ready project
-
-```
-
-```
