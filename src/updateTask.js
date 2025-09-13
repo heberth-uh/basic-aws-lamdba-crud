@@ -1,14 +1,16 @@
 const AWS = require('aws-sdk')
+const middy = require('@middy/core');
+const httpJsonBodyParser = require('@middy/http-json-body-parser');
 
 const updateTask = async (event) => {
     const dynamoDB = new AWS.DynamoDB.DocumentClient();
     const { id } = event.pathParameters;
 
-    const { done, title, description } = JSON.parse(event.body);
+    const { done, title, description } = event.body;
 
     await dynamoDB.update({
         TableName: process.env.TASK_TABLE,
-        Key: {id},
+        Key: { id },
         UpdateExpression: 'set done = :done, title = :title, description = :description',
         ExpressionAttributeValues: {
             ':done': done,
@@ -26,4 +28,6 @@ const updateTask = async (event) => {
     }
 }
 
-module.exports = { updateTask }
+module.exports = {
+    updateTask: middy(updateTask).use(httpJsonBodyParser())
+}
