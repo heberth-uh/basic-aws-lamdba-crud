@@ -32,7 +32,7 @@ flowchart LR
     GetTasks --> LT_GetAll --> TasksTable
     GetTask --> LT_GetOne --> TasksTable
     UpdateTask --> LT_Update --> TasksTable
-    DeleteTask --> LT_Delete --> TasksTable
+    DeleteTask --> LT_Delete --> TasksTable```
 
 
 ## Features ✨
