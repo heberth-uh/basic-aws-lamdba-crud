@@ -7,10 +7,10 @@ flowchart LR
     subgraph API["API Gateway / HTTP API"]
         direction TB
         CreateTask[POST /tasks]
-        GetTasks[GET /tasks]
-        GetTask[GET /tasks/{id}]
-        UpdateTask[PUT /tasks/{id}]
-        DeleteTask[DELETE /tasks/{id}]
+        GetTasks[GET all tasks]
+        GetTask[GET single task]
+        UpdateTask[PUT /tasks]
+        DeleteTask[DELETE /tasks]
     end
 
     subgraph Lambda["AWS Lambda Functions"]
@@ -33,25 +33,25 @@ flowchart LR
     GetTask --> LT_GetOne --> TasksTable
     UpdateTask --> LT_Update --> TasksTable
     DeleteTask --> LT_Delete --> TasksTable
-```
+
 
 ## Features ✨
 
 Basic CRUD functions:
 
 - Create a new task
-- Geta all tasks
+- Get all tasks
 - Get a single task
 - Update a task
 - Delete a task
 
 ## Technologies 🛠️
 
-- **AWS Lamda**. Functions fro CRUD operations
+- **AWS Lambda**. Functions for CRUD operations
 - **AWS DynamoDB**. NoSQL database for storing tasks
 - **AWS IAM**. Roles and permissions for Lambda to access DynamoDB
-- **AWS Cloudwatch**. Monitoring/logs
-- **Serverless Framework**. Deployment and infrasctructure as code
+- **AWS CloudWatch**. Monitoring/logs
+- **Serverless Framework**. Deployment and infrastructure as code
 
 ## Endpoints 🌐
 
