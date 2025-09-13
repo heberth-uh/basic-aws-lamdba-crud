@@ -2,38 +2,7 @@
 
 This is a simple CRUD API built with **AWS Lambda**, **DynamoDB** and the **Serverless Framework**. It was made as a learning project to get familiar with serverless architecture on AWS.
 
-```mermaid
-flowchart LR
-    subgraph API["API Gateway / HTTP API"]
-        direction TB
-        CreateTask[POST /tasks]
-        GetTasks[GET all tasks]
-        GetTask[GET single task]
-        UpdateTask[PUT /tasks]
-        DeleteTask[DELETE /tasks]
-    end
-
-    subgraph Lambda["AWS Lambda Functions"]
-        direction TB
-        LT_Create[createTask Lambda]
-        LT_GetAll[getTasks Lambda]
-        LT_GetOne[getTask Lambda]
-        LT_Update[updateTask Lambda]
-        LT_Delete[deleteTask Lambda]
-    end
-
-    subgraph DB["DynamoDB"]
-        direction TB
-        TasksTable[TASK_TABLE]
-    end
-
-    %% Connections
-    CreateTask --> LT_Create --> TasksTable
-    GetTasks --> LT_GetAll --> TasksTable
-    GetTask --> LT_GetOne --> TasksTable
-    UpdateTask --> LT_Update --> TasksTable
-    DeleteTask --> LT_Delete --> TasksTable```
-
+<img width="1231" height="867" alt="image" src="https://github.com/user-attachments/assets/c985a734-39fe-4c28-a624-f3c136f3f2e9" />
 
 ## Features ✨
 
