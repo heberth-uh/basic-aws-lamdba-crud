@@ -1,69 +1,72 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Serverless Task API
 
-# Serverless Framework Node HTTP API on AWS
+This is a simple CRUD API built with **AWS Lambda**, **DynamoDB** and the **Serverless Framework**. It was made as a learning project to get familiar with serverless architecture on AWS.
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+```mermaid
+flowchart LR
+    subgraph API["API Gateway / HTTP API"]
+        direction TB
+        CreateTask[POST /tasks]
+        GetTasks[GET /tasks]
+        GetTask[GET /tasks/{id}]
+        UpdateTask[PUT /tasks/{id}]
+        DeleteTask[DELETE /tasks/{id}]
+    end
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+    subgraph Lambda["AWS Lambda Functions"]
+        direction TB
+        LT_Create[createTask Lambda]
+        LT_GetAll[getTasks Lambda]
+        LT_GetOne[getTask Lambda]
+        LT_Update[updateTask Lambda]
+        LT_Delete[deleteTask Lambda]
+    end
 
-## Usage
+    subgraph DB["DynamoDB"]
+        direction TB
+        TasksTable[TASK_TABLE]
+    end
 
-### Deployment
-
-In order to deploy the example, you need to run the following command:
-
-```
-serverless deploy
-```
-
-After running deploy, you should see output similar to:
-
-```
-Deploying "serverless-http-api" to stage "dev" (us-east-1)
-
-✔ Service deployed to stack serverless-http-api-dev (91s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: serverless-http-api-dev-hello (1.6 kB)
+    %% Connections
+    CreateTask --> LT_Create --> TasksTable
+    GetTasks --> LT_GetAll --> TasksTable
+    GetTask --> LT_GetOne --> TasksTable
+    UpdateTask --> LT_Update --> TasksTable
+    DeleteTask --> LT_Delete --> TasksTable
 ```
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [HTTP API (API Gateway V2) event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api).
+## Features ✨
 
-### Invocation
+Basic CRUD functions:
 
-After successful deployment, you can call the created application via HTTP:
+- Create a new task
+- Geta all tasks
+- Get a single task
+- Update a task
+- Delete a task
+
+## Technologies 🛠️
+
+- **AWS Lamda**. Functions fro CRUD operations
+- **AWS DynamoDB**. NoSQL database for storing tasks
+- **AWS IAM**. Roles and permissions for Lambda to access DynamoDB
+- **AWS Cloudwatch**. Monitoring/logs
+- **Serverless Framework**. Deployment and infrasctructure as code
+
+## Endpoints 🌐
+
+This API exposes basic REST endpoints:
+
+- `GET /tasks`
+- `GET /tasks/{id}`
+- `POST /tasks`
+- `PUT /tasks/{id}`
+- `DELETE /tasks/{id}`
+
+## Notes 📝
+
+This is not a production-ready project
 
 ```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
-
-Which should result in response similar to:
-
-```json
-{ "message": "Go Serverless v4! Your function executed successfully!" }
-```
-
-### Local development
-
-The easiest way to develop and test your function is to use the `dev` command:
 
 ```
-serverless dev
-```
-
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
-
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
-
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
